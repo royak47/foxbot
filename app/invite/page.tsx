@@ -12,20 +12,7 @@ const InvitePage = () => {
   };
 
   return (
-    <main className="relative w-full min-h-screen max-w-md mx-auto bg-black">
-      {/* Background Image */}
-      <div className="fixed inset-0 max-w-md mx-auto">
-        <Image
-          src="/babyliger.png"
-          alt="Baby Liger Background"
-          fill
-          className="object-cover opacity-30"
-          sizes="(max-width: 768px) 100vw, 384px"
-          priority
-          quality={100}
-        />
-      </div>
-
+    <main className="relative w-full min-h-screen max-w-md mx-auto bg-gradient-to-b from-[#0E0E0E] via-[#1A1A1A] to-[#0E0E0E]">
       {/* Content */}
       <div className="relative z-10 min-h-screen pb-20">
         <header className="p-4">

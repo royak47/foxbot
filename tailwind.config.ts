@@ -17,15 +17,6 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
-      keyframes: {
-        "ping-once": {
-          "0%": { transform: "scale(1)", opacity: "1" },
-          "100%": { transform: "scale(2)", opacity: "0" },
-        },
-      },
-      animation: {
-        "ping-once": "ping-once 0.3s ease-out forwards",
-      },
     },
   },
   plugins: [],

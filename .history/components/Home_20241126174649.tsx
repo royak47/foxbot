@@ -14,7 +14,20 @@ const Home = () => {
   };
 
   return (
-    <main className="relative w-full min-h-screen max-w-md mx-auto bg-gradient-to-br from-[#1a0b2e] via-[#2b1245] to-[#1a0b2e]">
+    <main className="relative w-full min-h-screen max-w-md mx-auto bg-black">
+      {/* Background Image */}
+      <div className="fixed inset-0 max-w-md mx-auto">
+        <Image
+          src="/babyliger.png"
+          alt="Baby Liger Background"
+          fill
+          className="object-cover opacity-30"
+          sizes="(max-width: 768px) 100vw, 384px"
+          priority
+          quality={100}
+        />
+      </div>
+
       {/* Content */}
       <div className="relative z-10 min-h-screen pb-20"> 
         {/* Header */}
@@ -79,4 +92,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home;ss

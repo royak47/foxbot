@@ -1,15 +1,17 @@
 'use client';
 import Navbar from '@/components/Navbar';
+import TicTacToe from '@/components/TicTacToe';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const PlayPage = () => {
-  const router = useRouter();
-  const gameBalance = 0; // Initial game balance
+  const [gameBalance, setGameBalance] = useState(0);
+  const [isGameOpen, setIsGameOpen] = useState(false);
 
-  const handlePlayGame = () => {
-    // Will implement game routing later
-    console.log('Starting game...');
+  const handleGameComplete = (didWin: boolean) => {
+    if (didWin) {
+      setGameBalance(prev => prev + 100); // Award 100 tokens for winning
+    }
   };
 
   return (
@@ -39,7 +41,7 @@ const PlayPage = () => {
         {/* Centered Play Button */}
         <div className="flex items-center justify-center min-h-[80vh]">
           <button
-            onClick={handlePlayGame}
+            onClick={() => setIsGameOpen(true)}
             className="bg-gradient-to-r from-[#0088CC] to-[#0077B5] text-white font-bold py-6 px-12 rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-110 active:scale-95 relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
@@ -48,8 +50,17 @@ const PlayPage = () => {
         </div>
       </div>
 
+      {/* Game Modal */}
+      <TicTacToe
+        isOpen={isGameOpen}
+        onClose={() => setIsGameOpen(false)}
+        onGameComplete={handleGameComplete}
+      />
+
       {/* Navigation Bar */}
-      <Navbar />
+      <div className={`${isGameOpen ? 'pointer-events-none' : ''}`}>
+        <Navbar />
+      </div>
     </main>
   );
 };

@@ -17,5 +17,157 @@
 body {
   color: var(--foreground);
   background: var(--background);
+  margin: 0;
+  padding: 0;
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Reward Popup Animation */
+@keyframes rewardPopup {
+  0% {
+    transform: translate(-50%, 0) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(-50%, -20px) scale(1.2);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, -40px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -60px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Ping Animation */
+@keyframes ping-once {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Particle Animation */
+@keyframes particle {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+  30% {
+    transform: translate(0, -10px) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Result Popup Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0) rotate(-180deg);
+  }
+  60% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-reward-popup {
+  animation: rewardPopup 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-ping-once {
+  animation: ping-once 0.5s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+.animate-particle {
+  animation: particle 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.popup-overlay {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.popup-content {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+.result-icon {
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.result-text {
+  animation: slideUp 0.4s ease-out 0.2s both;
+}
+
+.reward-badge {
+  animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s both;
+}
+
+.button-left {
+  animation: slideInLeft 0.4s ease-out 0.6s both;
+}
+
+.button-right {
+  animation: slideInRight 0.4s ease-out 0.6s both;
 }

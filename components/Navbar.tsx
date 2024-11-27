@@ -7,6 +7,7 @@ const navItems = [
   { name: 'Home', icon: '/home.png', path: '/home' },
   { name: 'Leaderboard', icon: '/leaderboard.png', path: '/leaderboard' },
   { name: 'Play', icon: '/balance.png', path: '/play' },
+  { name: 'Tokens', icon: '/crypto.png', path: '/tokens' },
   { name: 'Invite', icon: '/invite.png', path: '/invite' },
 ];
 

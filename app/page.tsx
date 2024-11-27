@@ -1,9 +1,9 @@
 'use client';
 import SignIn from "../components/SignIn";
 
-export default function Home() {
+export default function Page() {
   return (
-    <main className="flex min-h-[100dvh] items-center justify-center bg-background">
+    <main className="flex min-h-screen items-center justify-center bg-gray-50">
       <SignIn />
     </main>
   );

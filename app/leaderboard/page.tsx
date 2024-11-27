@@ -18,7 +18,19 @@ const players = [
 
 const LeaderboardPage = () => {
   return (
-    <main className="relative w-full min-h-screen max-w-md mx-auto bg-gradient-to-b from-[#0E0E0E] via-[#1A1A1A] to-[#0E0E0E]">
+    <main className="relative w-full min-h-screen max-w-md mx-auto overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/space.png"
+          alt="Space Background"
+          fill
+          className="object-cover"
+          priority
+          quality={100}
+        />
+      </div>
+      
       {/* Content */}
       <div className="relative z-10 min-h-screen pb-20">
         <header className="p-4">

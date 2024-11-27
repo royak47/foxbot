@@ -62,23 +62,6 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const createParticles = (centerX: number, centerY: number) => {
-    const newParticles: TapParticle[] = [];
-    const radius = 20; // Distance from center
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const angle = (i * 2 * Math.PI) / PARTICLE_COUNT;
-      newParticles.push({
-        id: Date.now() + i,
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle),
-        angle: angle,
-      });
-    }
-
-    setParticles(prev => [...prev, ...newParticles]);
-  };
-
   const removeParticle = (id: number) => {
     setParticles(prev => prev.filter(p => p.id !== id));
   };

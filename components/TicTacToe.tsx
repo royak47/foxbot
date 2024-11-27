@@ -109,7 +109,7 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
 
       return () => clearTimeout(timer);
     }
-  }, [isPlayerTurn, board, gameOver]);
+  }, [isPlayerTurn, board, gameOver, checkWinner, handleGameComplete]);
 
   const resetGame = () => {
     setBoard(Array(9).fill(''));

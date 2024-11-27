@@ -9,7 +9,7 @@ const PlayPage = () => {
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [isGameOpen, setIsGameOpen] = useState(false);
 
-  const DAILY_GAME_LIMIT = 15;
+  const DAILY_GAME_LIMIT = 5;
   const WIN_REWARD = 20;
 
   // Reset games at midnight
@@ -31,6 +31,10 @@ const PlayPage = () => {
       setBabyligerBalance(prev => prev + WIN_REWARD);
     }
     setGamesPlayed(prev => prev + 1);
+  };
+
+  const handleCloseGame = () => {
+    setIsGameOpen(false);
   };
 
   return (
@@ -90,7 +94,7 @@ const PlayPage = () => {
       {/* Game Modal */}
       <TicTacToe
         isOpen={isGameOpen}
-        onClose={() => setIsGameOpen(false)}
+        onClose={handleCloseGame}
         onGameComplete={handleGameComplete}
         gamesLeft={DAILY_GAME_LIMIT - gamesPlayed}
       />

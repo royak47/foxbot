@@ -16,6 +16,18 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
   const [winner, setWinner] = useState<string | null>(null);
   const [winningLine, setWinningLine] = useState<number[] | null>(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [remainingGames, setRemainingGames] = useState(gamesLeft);
+
+  // Reset game when isOpen changes
+  useEffect(() => {
+    if (isOpen) {
+      resetGame();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setRemainingGames(gamesLeft);
+  }, [gamesLeft]);
 
   const winningCombinations = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
@@ -37,6 +49,12 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
     return squares.every(square => square !== '');
   };
 
+  const handleGameComplete = (playerWon: boolean) => {
+    setShowPopup(true);
+    setRemainingGames(prev => prev - 1);
+    onGameComplete?.(playerWon);
+  };
+
   const handleClick = (index: number) => {
     if (board[index] || !isPlayerTurn || gameOver) return;
 
@@ -50,16 +68,14 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
       setGameOver(true);
       setWinner('X');
       setWinningLine(line);
-      setShowPopup(true);
-      onGameComplete?.(true);
+      handleGameComplete(true);
       return;
     }
 
     if (isBoardFull(newBoard)) {
       setGameOver(true);
       setWinner(null);
-      setShowPopup(true);
-      onGameComplete?.(false);
+      handleGameComplete(false);
       return;
     }
   };
@@ -81,13 +97,11 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
             setGameOver(true);
             setWinner('O');
             setWinningLine(line);
-            setShowPopup(true);
-            onGameComplete?.(false);
+            handleGameComplete(false);
           } else if (isBoardFull(newBoard)) {
             setGameOver(true);
             setWinner(null);
-            setShowPopup(true);
-            onGameComplete?.(false);
+            handleGameComplete(false);
           }
         }
         setIsPlayerTurn(true);
@@ -104,6 +118,11 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
     setWinner(null);
     setWinningLine(null);
     setShowPopup(false);
+  };
+
+  const handleClose = () => {
+    resetGame();
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -212,64 +231,84 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
 
             {/* Result Popup */}
             {showPopup && (
-              <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 popup-overlay">
-                <div className="relative popup-content animate-popup">
-                  <div className="bg-gradient-to-br from-[#2a1b3d] to-[#1a0b2e] backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl w-[90vw] max-w-sm">
-                    {/* Animated Background */}
-                    <div className="absolute inset-0 rounded-3xl overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 animate-gradient-xy"></div>
-                      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-30"></div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="relative">
+              <div className="fixed inset-0 z-[200] flex items-center justify-center animate-fadeIn">
+                <div className="relative w-[90%] max-w-sm">
+                  {/* Background Image */}
+                  <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                    <Image
+                      src="/space.png"
+                      alt="Space Background"
+                      fill
+                      className="object-cover"
+                      priority
+                      quality={100}
+                    />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl p-8 rounded-3xl 
+                                border border-white/20 shadow-2xl transform transition-all duration-500 animate-scaleIn">
+                    <div className="text-center">
                       {/* Result Icon */}
-                      <div className="w-20 h-20 mx-auto mb-4 result-icon animate-result-icon">
+                      <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4
+                                  ${winner === 'X' 
+                                    ? 'bg-gradient-to-br from-blue-500/20 to-blue-600/20 border border-blue-400/50' 
+                                    : winner === 'O'
+                                      ? 'bg-gradient-to-br from-red-500/20 to-red-600/20 border border-red-400/50'
+                                      : 'bg-gradient-to-br from-purple-500/20 to-purple-600/20 border border-purple-400/50'
+                                  }`}>
                         {winner === 'X' ? (
-                          <div className="w-full h-full bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center">
-                            <span className="text-4xl">🏆</span>
-                          </div>
+                          <span className="text-3xl text-blue-400 animate-bounce">🏆</span>
                         ) : winner === 'O' ? (
-                          <div className="w-full h-full bg-gradient-to-r from-red-400 to-pink-400 rounded-full flex items-center justify-center">
-                            <span className="text-4xl">😢</span>
-                          </div>
+                          <span className="text-3xl text-red-400 animate-bounce">😢</span>
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
-                            <span className="text-4xl">🤝</span>
-                          </div>
+                          <span className="text-3xl text-purple-400 animate-bounce">🤝</span>
                         )}
                       </div>
 
                       {/* Result Text */}
-                      <div className="text-center mb-6 result-text animate-result-text">
-                        <h3 className="text-2xl font-bold text-white mb-2">
-                          {winner === 'X' ? 'Victory!' : winner === 'O' ? 'Better luck next time!' : 'It\'s a draw!'}
-                        </h3>
-                        {winner === 'X' && (
-                          <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-xl p-3 mb-4 reward-badge">
-                            <span className="text-xl font-semibold text-white">+20 BabyLiger</span>
-                          </div>
-                        )}
-                        <p className="text-white/60">
-                          Games remaining today: {gamesLeft}
-                        </p>
-                      </div>
+                      <h3 className={`text-2xl font-bold mb-2
+                                  ${winner === 'X' 
+                                    ? 'bg-gradient-to-r from-blue-400 to-blue-600' 
+                                    : winner === 'O'
+                                      ? 'bg-gradient-to-r from-red-400 to-red-600'
+                                      : 'bg-gradient-to-r from-purple-400 to-purple-600'
+                                  } text-transparent bg-clip-text`}>
+                        {winner === 'X' 
+                          ? 'You Won!' 
+                          : winner === 'O' 
+                            ? 'You Lost!' 
+                            : "It's a Draw!"}
+                      </h3>
+                      
+                      <p className="text-white/60 mb-6">
+                        {winner === 'X' 
+                          ? '+20 BabyLiger Tokens!' 
+                          : 'Better luck next time!'}
+                      </p>
 
-                      {/* Buttons */}
+                      {/* Games Left Counter */}
+                      <p className="text-sm text-white/40 mb-6">
+                        Games left today: {remainingGames}
+                      </p>
+
+                      {/* Action Buttons */}
                       <div className="flex gap-3">
                         <button
                           onClick={resetGame}
-                          className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-3 px-6 rounded-xl
-                                   hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-300 button-left"
+                          className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold 
+                                  py-3 px-6 rounded-xl hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] 
+                                  transition-all duration-300 transform hover:scale-105 active:scale-95"
                         >
                           Play Again
                         </button>
                         <button
-                          onClick={() => setShowPopup(false)}
-                          className="flex-1 bg-gradient-to-r from-white/5 to-white/10 text-white/60 font-semibold py-3 px-6 rounded-xl
-                                   border border-white/10 hover:text-white hover:border-white/20 transition-all duration-300 button-right"
+                          onClick={handleClose}
+                          className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-semibold 
+                                  py-3 px-6 rounded-xl hover:shadow-[0_0_15px_rgba(107,114,128,0.5)] 
+                                  transition-all duration-300 transform hover:scale-105 active:scale-95"
                         >
-                          Close
+                          Exit
                         </button>
                       </div>
                     </div>

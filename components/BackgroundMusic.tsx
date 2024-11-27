@@ -1,59 +1,39 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const BackgroundMusic = () => {
-  const [audio] = useState(typeof Audio !== 'undefined' ? new Audio('/Beloved.mp3') : null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
   useEffect(() => {
-    if (audio) {
-      audio.loop = true;
-      
-      const handlePlay = () => setIsPlaying(true);
-      const handlePause = () => setIsPlaying(false);
-      
-      audio.addEventListener('play', handlePlay);
-      audio.addEventListener('pause', handlePause);
-      
-      return () => {
-        audio.pause();
-        audio.removeEventListener('play', handlePlay);
-        audio.removeEventListener('pause', handlePause);
-      };
-    }
-  }, [audio]);
-
-  const toggleMusic = () => {
-    if (!audio) return;
+    const audio = new Audio('/Beloved.mp3');
+    audio.loop = true;
     
-    if (isPlaying) {
-      audio.pause();
-    } else {
+    const playAudio = () => {
       audio.play().catch(error => {
-        console.log('Playback failed:', error);
+        console.log('Auto-play failed:', error);
       });
-    }
-  };
+    };
 
-  return (
-    <button
-      onClick={toggleMusic}
-      className="fixed bottom-6 right-6 z-[100] bg-gradient-to-r from-purple-600 to-blue-600 rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-      title={isPlaying ? 'Pause Music' : 'Play Music'}
-    >
-      {isPlaying ? (
-        // Pause Icon
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-        </svg>
-      ) : (
-        // Play Icon
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-      )}
-    </button>
-  );
+    // Try to play when component mounts
+    playAudio();
+
+    // Also try to play when user interacts with the page
+    const handleInteraction = () => {
+      playAudio();
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    };
+
+    document.addEventListener('click', handleInteraction);
+    document.addEventListener('touchstart', handleInteraction);
+
+    return () => {
+      audio.pause();
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    };
+  }, []);
+
+  return null;
 };
 
 export default BackgroundMusic;

@@ -55,33 +55,42 @@ const PlayPage = () => {
       <div className="relative z-10 min-h-screen pb-20">
         {/* Top Bar with Balance and Games */}
         <div className="p-4 flex justify-between items-center">
-          <div className="flex items-center bg-gradient-to-br from-white/10 via-purple-500/5 to-white/5 backdrop-blur-xl rounded-full px-4 py-2 border border-white/20
-                      hover:border-purple-500/30 transition-all duration-500">
-            <span className="text-white font-semibold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+          <div className="flex items-center bg-gradient-to-br from-[#FFF8DC]/80 to-[#FFDAB9]/80 backdrop-blur-xl rounded-full px-4 py-2 border border-[#DEB887]/30">
+            <span className="text-[#8B4513] font-semibold">
               BabyLiger: {babyligerBalance}
             </span>
           </div>
-          <div className="flex items-center bg-gradient-to-br from-white/10 via-purple-500/5 to-white/5 backdrop-blur-xl rounded-full px-4 py-2 border border-white/20">
-            <span className="text-white/60 text-sm">
+          <div className="flex items-center bg-gradient-to-br from-[#FFF8DC]/80 to-[#FFDAB9]/80 backdrop-blur-xl rounded-full px-4 py-2 border border-[#DEB887]/30">
+            <span className="text-[#8B4513] text-sm">
               Games: {gamesPlayed}/{DAILY_GAME_LIMIT}
             </span>
           </div>
         </div>
 
-        {/* Centered Play Button */}
-        <div className="flex items-center justify-center min-h-[80vh]">
+        {/* Game Image and Play Button */}
+        <div className="flex flex-col items-center justify-center gap-8 min-h-[70vh]">
+          <div className="relative w-64 h-64">
+            <Image
+              src="/tictactoe.jpeg"
+              alt="Tic Tac Toe Game"
+              fill
+              className="object-contain rounded-2xl shadow-lg"
+              priority
+              quality={100}
+            />
+          </div>
+          
           <button
             onClick={() => setIsGameOpen(true)}
             disabled={gamesPlayed >= DAILY_GAME_LIMIT}
-            className={`bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-6 px-12 rounded-2xl 
-                     shadow-[0_0_15px_rgba(168,85,247,0.5)] transform transition-all duration-300 
-                     hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(168,85,247,0.7)] active:scale-[0.98]
-                     relative overflow-hidden group
+            className={`bg-gradient-to-r from-[#FAEBD7] to-[#DEB887] text-[#8B4513] font-bold py-4 px-8 rounded-xl
+                     border-2 border-[#DEB887]/30 shadow-lg transform transition-all duration-300 
+                     hover:scale-[1.02] hover:shadow-xl hover:from-[#FFE4BC] hover:to-[#FFDAB9]
+                     active:scale-[0.98] relative overflow-hidden group
                      ${gamesPlayed >= DAILY_GAME_LIMIT ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
             <span className="relative text-xl flex items-center gap-2">
-              <svg className="w-6 h-6 animate-pulse" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2"/>
                 <path d="M10 8L16 12L10 16V8Z" fill="currentColor"/>
               </svg>

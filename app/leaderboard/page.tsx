@@ -1,9 +1,10 @@
 'use client';
 import Navbar from '@/components/Navbar';
 import Image from 'next/image';
+import { useState } from 'react';
 
 // Sample player data
-const players = [
+const weeklyPlayers = [
   { id: 1, username: '@player1', balance: 25000, avatar: '/userimage.png' },
   { id: 2, username: '@player2', balance: 18500, avatar: '/userimage.png' },
   { id: 3, username: '@player3', balance: 15700, avatar: '/userimage.png' },
@@ -16,7 +17,34 @@ const players = [
   { id: 10, username: '@player10', balance: 4300, avatar: '/userimage.png' },
 ];
 
+const monthlyPlayers = weeklyPlayers.map(player => ({
+  ...player,
+  balance: player.balance * 4,
+}));
+
+const allTimePlayers = weeklyPlayers.map(player => ({
+  ...player,
+  balance: player.balance * 10,
+}));
+
+type TimeFrame = 'weekly' | 'monthly' | 'all-time';
+
 const LeaderboardPage = () => {
+  const [timeFrame, setTimeFrame] = useState<TimeFrame>('weekly');
+
+  const getCurrentPlayers = () => {
+    switch(timeFrame) {
+      case 'weekly':
+        return weeklyPlayers;
+      case 'monthly':
+        return monthlyPlayers;
+      case 'all-time':
+        return allTimePlayers;
+    }
+  };
+
+  const players = getCurrentPlayers();
+
   return (
     <main className="relative w-full min-h-screen max-w-md mx-auto overflow-hidden">
       {/* Background Image */}
@@ -35,7 +63,22 @@ const LeaderboardPage = () => {
       <div className="relative z-10 min-h-screen pb-20">
         <header className="p-4">
           <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
-            <h1 className="text-2xl font-bold text-white text-center">Leaderboard</h1>
+            <h1 className="text-2xl font-bold text-white text-center mb-4">Leaderboard</h1>
+            <div className="flex justify-center gap-2">
+              {(['weekly', 'monthly', 'all-time'] as TimeFrame[]).map((tf) => (
+                <button
+                  key={tf}
+                  onClick={() => setTimeFrame(tf)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                    timeFrame === tf
+                      ? 'bg-[#2081e2] text-white'
+                      : 'text-white/60 hover:text-white'
+                  }`}
+                >
+                  {tf.charAt(0).toUpperCase() + tf.slice(1).replace('-', ' ')}
+                </button>
+              ))}
+            </div>
           </div>
         </header>
 
@@ -101,7 +144,7 @@ const LeaderboardPage = () => {
           </div>
 
           {/* Rest of Players */}
-          <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10">
+          <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10" style={{ maxHeight: '340px', overflowY: 'auto' }}>
             {players.slice(3).map((player, index) => (
               <div
                 key={player.id}

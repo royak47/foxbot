@@ -17,6 +17,7 @@ const Home = () => {
     dailyTaps: 0,
   });
   const [isPressed, setIsPressed] = useState(false);
+  const [showContestPopup, setShowContestPopup] = useState(false);
   const [error, setError] = useState('');
   const [particles, setParticles] = useState<TapParticle[]>([]);
   const [username, setUsername] = useState<string>('username');
@@ -114,7 +115,9 @@ const Home = () => {
   };
 
   return (
-    <main className="relative w-full min-h-screen max-w-md mx-auto overflow-hidden">
+    <main className="relative w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] overflow-hidden">
+      <Navbar   />
+      
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -133,9 +136,15 @@ const Home = () => {
           {/* Top Bar */}
           <div className="flex items-center justify-between mb-3">
             {/* Stats Display */}
-            <div className="flex flex-col bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
-              <span className="text-white font-semibold">Balance: {stats.balance}</span>
-              <span className="text-white/60 text-sm">Taps: {stats.dailyTaps}/{DAILY_TAP_LIMIT}</span>
+            <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
+              <Image
+                src="/babyliger_token.png"
+                alt="babyliger_token"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+              <span className="text-white font-semibold">Tap balance: {stats.balance}</span>
             </div>
 
             {/* Profile */}
@@ -232,8 +241,80 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Navigation Bar */}
-      <Navbar />
+      {/* Contest Button */}
+      <div className="absolute left-4 bottom-20 z-10">
+        <button
+          onClick={() => setShowContestPopup(true)}
+          className="px-6 py-2.5 bg-[#2081e2] hover:bg-[#1868b7] text-white rounded-lg transition-colors duration-200 font-semibold shadow-lg flex items-center justify-center space-x-2"
+        >
+          <span>🏆</span>
+          <span>Contest</span>
+        </button>
+      </div>
+
+      {/* Contest Popup */}
+      {showContestPopup && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn" 
+          onClick={() => setShowContestPopup(false)}
+        >
+          <div 
+            className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-2xl relative w-[90%] max-w-md transform scale-100 animate-scaleIn"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="absolute -top-4 -right-4">
+              <button
+                onClick={() => setShowContestPopup(false)}
+                className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-110"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="text-center">
+              <div className="mb-6">
+                <span className="text-5xl">🏆</span>
+              </div>
+              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-[#2081e2] to-[#1868b7] bg-clip-text text-transparent">
+                Contest
+              </h2>
+              <div className="relative">
+                <p className="text-xl text-gray-700 font-medium mb-4">Coming Soon!</p>
+                <p className="text-gray-500 text-sm">
+                  Get ready for exciting competitions and amazing prizes!
+                </p>
+              </div>
+              
+              <div className="mt-8 space-y-4">
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                  <span>🎮</span>
+                  <span>Stay tuned for updates</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+        
+        .animate-scaleIn {
+          animation: scaleIn 0.3s ease-out;
+        }
+      `}</style>
     </main>
   );
 };

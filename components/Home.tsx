@@ -136,15 +136,15 @@ const Home = () => {
           {/* Top Bar */}
           <div className="flex items-center justify-between mb-3">
             {/* Stats Display */}
-            <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
+            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
               <Image
-                src="/babyliger_token.png"
-                alt="babyliger_token"
+                src="/tapliger.png"
+                alt="tapliger"
                 width={32}
                 height={32}
                 className="rounded-full"
               />
-              <span className="text-white font-semibold">Tap balance: {stats.balance}</span>
+              <span className="text-white font-semibold">Tap Coin: {stats.balance}</span>
             </div>
 
             {/* Profile */}

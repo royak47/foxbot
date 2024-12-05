@@ -1,45 +1,21 @@
 'use client';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import TapFOX from './TapFOX';
 
-interface TapParticle {
-  id: number;
-  x: number;
-  y: number;
-  angle: number;
-}
-
 const Home = () => {
-  const [stats, setStats] = useState({
-    balance: 0,
-    dailyTaps: 0,
-  });
-  const [isPressed, setIsPressed] = useState(false);
-  const [showContestPopup, setShowContestPopup] = useState(false);
-  const [error, setError] = useState('');
-  const [particles, setParticles] = useState<TapParticle[]>([]);
+  const [timeLeft, setTimeLeft] = useState(6 * 60 * 60); // 6 hours in seconds
+  const [isClaimed, setIsClaimed] = useState(false);
   const [username, setUsername] = useState<string>('username');
   const [photoUrl, setPhotoUrl] = useState<string>('/userimage.png');
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [balance, setBalance] = useState(0);
 
-  const DAILY_TAP_LIMIT = 10;
-  const TAP_REWARD = 50;
-  const PARTICLE_COUNT = 12; // Increased number of particles for better burst effect
-
-  // Initialize audio
-  useEffect(() => {
-    audioRef.current = new Audio('/tap-sound.mp3');
-    audioRef.current.volume = 0.3;
-  }, []);
-
-  // Get user data from localStorage after component mounts
+  // Get user data from localStorage
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     const storedPhotoUrl = localStorage.getItem('photoUrl');
-    
+
     if (storedUsername) {
       setUsername(storedUsername);
     }
@@ -48,76 +24,34 @@ const Home = () => {
     }
   }, []);
 
-  // Reset taps at midnight
+  // Countdown timer logic
   useEffect(() => {
-    const now = new Date();
-    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+    if (timeLeft > 0) {
+      const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+      return () => clearInterval(timer);
+    }
+  }, [timeLeft]);
 
-    const resetTaps = () => {
-      setStats(prev => ({ ...prev, dailyTaps: 0 }));
-      setError('');
-    };
-
-    const timer = setTimeout(resetTaps, timeUntilMidnight);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const removeParticle = (id: number) => {
-    setParticles(prev => prev.filter(p => p.id !== id));
+  // Format time (hh:mm:ss)
+  const formatTime = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  const handleTap = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (stats.dailyTaps >= DAILY_TAP_LIMIT) {
-      setError('Daily tap limit reached! Come back tomorrow!');
-      return;
+  const handleClaim = () => {
+    if (timeLeft === 0 && !isClaimed) {
+      setBalance((prev) => prev + 10); // Add 10 FOX
+      setIsClaimed(true);
+      setTimeLeft(6 * 60 * 60); // Reset timer for next claim
     }
-
-    // Play sound
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(error => {
-        console.error('Error playing sound:', error);
-      });
-    }
-
-    // Create burst of particles
-    const x = e.clientX;
-    const y = e.clientY;
-
-    // Clear existing particles
-    setParticles([]);
-
-    // Create new particles in a circle
-    const angleStep = (2 * Math.PI) / PARTICLE_COUNT;
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const angle = i * angleStep;
-      setParticles(prev => [...prev, {
-        id: Date.now() + i,
-        x,
-        y,
-        angle,
-      }]);
-    }
-
-    // Update balance and tap count
-    setStats(prev => ({
-      balance: prev.balance + TAP_REWARD,
-      dailyTaps: prev.dailyTaps + 1,
-    }));
-
-    // Visual feedback
-    setIsPressed(true);
-    setTimeout(() => setIsPressed(false), 100);
-
-    // Clear any previous error
-    setError('');
   };
 
   return (
     <main className="relative w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] overflow-hidden">
-      <Navbar   />
-      
+      <Navbar />
+
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -129,192 +63,59 @@ const Home = () => {
           quality={100}
         />
       </div>
-      {/* Content */}
-      <div className="relative z-10 min-h-screen pb-20"> 
-        {/* Header */}
-        <header className="p-4">
-          {/* Top Bar */}
-          <div className="flex items-center justify-between mb-3">
-            {/* Stats Display */}
-            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
-              <Image
-                src="/tapFOX.png"
-                alt="tapFOX"
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-              <span className="text-white font-semibold">Tap Coin: {stats.balance}</span>
-            </div>
 
-            {/* Profile */}
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl rounded-full px-4 py-2 border border-white/20">
-              <span className="text-white font-medium">@{username}</span>
-              <div className="w-8 h-8 rounded-full overflow-hidden">
-                <Image
-                  src={photoUrl}
-                  alt="User Profile"
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+      {/* Content */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center">
+        {/* Profile and Balance */}
+        <header className="absolute top-4 w-full px-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
+            <Image
+              src="/tapFOX.png"
+              alt="tapFOX"
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+            <span className="text-white font-semibold">Tap Coin: {balance}</span>
           </div>
 
-          {/* Title Bar */}
-          <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
-            <h1 className="text-2xl font-bold text-white text-center">FOX</h1>
+          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl rounded-full px-4 py-2 border border-white/20">
+            <span className="text-white font-medium">@{username}</span>
+            <div className="w-8 h-8 rounded-full overflow-hidden">
+              <Image
+                src={photoUrl}
+                alt="User Profile"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         </header>
 
-        {/* Token Tap Area */}
-        <div className="flex flex-col items-center justify-center flex-1 p-8 min-h-[60vh]">
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 p-3 bg-red-500/20 text-red-200 rounded-lg text-center">
-              {error}
-            </div>
-          )}
+        {/* FOX Token using TapFOX */}
+        <div className="text-center">
+          <TapFOX />
 
-          {/* Tap Button */}
+          {/* Countdown Timer */}
+          <h1 className="text-4xl text-white font-bold mb-4">
+            {timeLeft > 0 ? formatTime(timeLeft) : 'Ready to Claim!'}
+          </h1>
+
+          {/* Claim Button */}
           <button
-            ref={buttonRef}
-            onClick={handleTap}
-            disabled={stats.dailyTaps >= DAILY_TAP_LIMIT}
-            className={`relative transform transition-all duration-200 ${
-              isPressed ? 'scale-95' : 'scale-100 hover:scale-105'
-            } ${stats.dailyTaps >= DAILY_TAP_LIMIT ? 'opacity-50 cursor-not-allowed' : ''}`}
+            onClick={handleClaim}
+            disabled={timeLeft > 0 || isClaimed}
+            className={`px-8 py-3 rounded-lg font-semibold transition ${
+              timeLeft > 0 || isClaimed
+                ? 'bg-gray-500 cursor-not-allowed'
+                : 'bg-[#2081e2] hover:bg-[#1868b7] text-white'
+            }`}
           >
-            <div className="relative w-48 h-48">
-              <Image
-                src="/FOX_token.png"
-                alt="FOX Token"
-                fill
-                className={`object-contain transition-transform duration-200 ${
-                  isPressed ? 'scale-95' : 'scale-100'
-                }`}
-                priority
-              />
-            </div>
-
-            {/* Tap Animation Ring */}
-            <div className={`absolute inset-0 rounded-full transition-opacity duration-200 ${
-              isPressed ? 'animate-ping-once bg-purple-500/20' : 'opacity-0'
-            }`} />
-
-            {/* Reward Animation */}
-            {isPressed && (
-              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-green-400 font-bold text-xl animate-reward-popup">
-                +{TAP_REWARD}
-              </div>
-            )}
+            {isClaimed ? 'Claimed!' : 'Claim 10 FOX 🦊'}
           </button>
-
-          {/* Particle Effects */}
-          {particles.map(particle => (
-            <TapFOX
-              key={particle.id}
-              position={{ x: particle.x, y: particle.y }}
-              angle={particle.angle}
-              onComplete={() => removeParticle(particle.id)}
-            />
-          ))}
-
-          {/* Tap Status */}
-          <p className="text-white/60 text-sm mt-4">
-            {stats.dailyTaps >= DAILY_TAP_LIMIT 
-              ? 'Daily limit reached! Come back tomorrow!'
-              : `Tap to earn ${TAP_REWARD} tokens! (${DAILY_TAP_LIMIT - stats.dailyTaps} taps remaining)`
-            }
-          </p>
-
-          {/* Daily Progress */}
-          <div className="mt-6 w-full max-w-xs">
-            <div className="bg-white/10 rounded-full h-2 overflow-hidden">
-              <div 
-                className="bg-gradient-to-r from-purple-500 to-pink-500 h-full transition-all duration-300"
-                style={{ width: `${(stats.dailyTaps / DAILY_TAP_LIMIT) * 100}%` }}
-              />
-            </div>
-          </div>
         </div>
       </div>
-
-      {/* Contest Button */}
-      <div className="absolute left-4 bottom-20 z-10">
-        <button
-          onClick={() => setShowContestPopup(true)}
-          className="px-6 py-2.5 bg-[#2081e2] hover:bg-[#1868b7] text-white rounded-lg transition-colors duration-200 font-semibold shadow-lg flex items-center justify-center space-x-2"
-        >
-          <span>🏆</span>
-          <span>Contest</span>
-        </button>
-      </div>
-
-      {/* Contest Popup */}
-      {showContestPopup && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn" 
-          onClick={() => setShowContestPopup(false)}
-        >
-          <div 
-            className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-2xl relative w-[90%] max-w-md transform scale-100 animate-scaleIn"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="absolute -top-4 -right-4">
-              <button
-                onClick={() => setShowContestPopup(false)}
-                className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-110"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="text-center">
-              <div className="mb-6">
-                <span className="text-5xl">🏆</span>
-              </div>
-              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-[#2081e2] to-[#1868b7] bg-clip-text text-transparent">
-                Contest
-              </h2>
-              <div className="relative">
-                <p className="text-xl text-gray-700 font-medium mb-4">Coming Soon!</p>
-                <p className="text-gray-500 text-sm">
-                  Get ready for exciting competitions and amazing prizes!
-                </p>
-              </div>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                  <span>🎮</span>
-                  <span>Stay tuned for updates</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes scaleIn {
-          from { transform: scale(0.95); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-        
-        .animate-scaleIn {
-          animation: scaleIn 0.3s ease-out;
-        }
-      `}</style>
     </main>
   );
 };

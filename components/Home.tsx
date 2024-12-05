@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
+// Assuming TapFOX is imported correctly
+import TapFOX from './TapFOX';
+
 const Home = () => {
   const [remainingTime, setRemainingTime] = useState(6 * 60 * 60); // 6 hours in seconds
   const [isClaimed, setIsClaimed] = useState(false);
@@ -88,9 +91,9 @@ const Home = () => {
         {particles.map((particle) => (
           <TapFOX
             key={particle.id}
-            position={{ x: particle.x, y: particle.y }} // Correct position with x and y
-            angle={particle.angle} // The angle for particle movement
-            onComplete={() => removeParticle(particle.id)} // Callback to remove particle when animation completes
+            position={{ x: particle.x, y: particle.y }} // Passing position correctly
+            angle={particle.angle} // Passing angle correctly
+            onComplete={() => removeParticle(particle.id)} // Removing particle when animation is complete
           />
         ))}
       </div>

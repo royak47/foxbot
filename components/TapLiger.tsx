@@ -2,13 +2,13 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-interface TapLigerProps {
+interface TapFOXProps {
   position: { x: number; y: number };
   angle: number;
   onComplete: () => void;
 }
 
-const TapLiger = ({ position, angle, onComplete }: TapLigerProps) => {
+const TapFOX = ({ position, angle, onComplete }: TapFOXProps) => {
   const [style, setStyle] = useState({
     x: 0,
     y: 0,
@@ -56,8 +56,8 @@ const TapLiger = ({ position, angle, onComplete }: TapLigerProps) => {
     >
       <div className="relative w-8 h-8">
         <Image
-          src="/tapliger.png"
-          alt="Tap Liger"
+          src="/tapFOX.png"
+          alt="Tap FOX"
           width={32}
           height={32}
           className="w-full h-full object-contain"
@@ -67,4 +67,4 @@ const TapLiger = ({ position, angle, onComplete }: TapLigerProps) => {
   );
 };
 
-export default TapLiger;
+export default TapFOX;

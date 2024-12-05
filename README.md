@@ -1,4 +1,4 @@
-# fox Mobile Game 
+# FOX Mobile Game 
 
 A mobile-first web application built with Next.js 13 that combines crypto token rewards with engaging gameplay.
 
@@ -34,7 +34,7 @@ A mobile-first web application built with Next.js 13 that combines crypto token 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/fox.git
+git clone https://github.com/yourusername/FOX.git
 ```
 
 2. Install dependencies:
@@ -67,8 +67,8 @@ npm run dev
 
 ## Required Assets
 
-- fox.png
-- fox_token.png
+- FOX.png
+- FOX_token.png
 - home.png
 - leaderboard.png
 - balance.png

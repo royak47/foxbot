@@ -274,7 +274,7 @@ const TicTacToe: React.FC<TicTacToeProps> = ({ isOpen, onClose, onGameComplete, 
               
               <p className="text-center text-[#A0522D] mb-6">
                 {winner === 'X' 
-                  ? '+20 fox Tokens!' 
+                  ? '+20 FOX Tokens!' 
                   : 'Better luck next time!'}
               </p>
 

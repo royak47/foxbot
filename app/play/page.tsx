@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 const PlayPage = () => {
-  const [foxBalance, setfoxBalance] = useState(0);
+  const [FOXBalance, setFOXBalance] = useState(0);
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [isGameOpen, setIsGameOpen] = useState(false);
 
@@ -28,7 +28,7 @@ const PlayPage = () => {
 
   const handleGameComplete = (didWin: boolean) => {
     if (didWin) {
-      setfoxBalance(prev => prev + WIN_REWARD);
+      setFOXBalance(prev => prev + WIN_REWARD);
     }
     setGamesPlayed(prev => prev + 1);
   };
@@ -57,7 +57,7 @@ const PlayPage = () => {
         <div className="p-4 flex justify-between items-center">
           <div className="flex items-center bg-gradient-to-br from-[#FFF8DC]/80 to-[#FFDAB9]/80 backdrop-blur-xl rounded-full px-4 py-2 border border-[#DEB887]/30">
             <span className="text-[#8B4513] font-semibold">
-              fox: {foxBalance}
+              FOX: {FOXBalance}
             </span>
           </div>
           <div className="flex items-center bg-gradient-to-br from-[#FFF8DC]/80 to-[#FFDAB9]/80 backdrop-blur-xl rounded-full px-4 py-2 border border-[#DEB887]/30">

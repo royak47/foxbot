@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import Navbar from './Navbar';
-import TapLiger from './TapLiger';
+import TapFOX from './TapFOX';
 
 interface TapParticle {
   id: number;
@@ -138,8 +138,8 @@ const Home = () => {
             {/* Stats Display */}
             <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
               <Image
-                src="/tapliger.png"
-                alt="tapliger"
+                src="/tapFOX.png"
+                alt="tapFOX"
                 width={32}
                 height={32}
                 className="rounded-full"
@@ -164,7 +164,7 @@ const Home = () => {
 
           {/* Title Bar */}
           <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
-            <h1 className="text-2xl font-bold text-white text-center">fox</h1>
+            <h1 className="text-2xl font-bold text-white text-center">FOX</h1>
           </div>
         </header>
 
@@ -188,8 +188,8 @@ const Home = () => {
           >
             <div className="relative w-48 h-48">
               <Image
-                src="/fox_token.png"
-                alt="fox Token"
+                src="/FOX_token.png"
+                alt="FOX Token"
                 fill
                 className={`object-contain transition-transform duration-200 ${
                   isPressed ? 'scale-95' : 'scale-100'
@@ -213,7 +213,7 @@ const Home = () => {
 
           {/* Particle Effects */}
           {particles.map(particle => (
-            <TapLiger
+            <TapFOX
               key={particle.id}
               position={{ x: particle.x, y: particle.y }}
               angle={particle.angle}

@@ -18,10 +18,10 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "fox",
-  description: "Play games and earn fox tokens",
+  title: "FOX",
+  description: "Play games and earn FOX tokens",
   icons: {
-    icon: "/tapliger.png",
+    icon: "/tapFOX.png",
   },
   manifest: "/manifest.json",
 };

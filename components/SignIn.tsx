@@ -36,8 +36,8 @@ const SignIn = () => {
           <div className="text-center mb-12">
             <div className="mb-6">
               <Image
-                src="/fox_token.png"
-                alt="fox Logo"
+                src="/FOX_token.png"
+                alt="FOX Logo"
                 width={120}
                 height={120}
                 className="mx-auto"
@@ -45,7 +45,7 @@ const SignIn = () => {
             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 text-transparent bg-clip-text 
                        bg-[length:200%_auto] animate-shine mb-3">
-              fox
+              FOX
             </h1>
             <p className="text-white/60 text-lg">Welcome to the future of gaming</p>
           </div>

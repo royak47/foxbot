@@ -39,7 +39,7 @@ const TokensPage = () => {
             <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
               <div className="flex items-center gap-2 mb-2">
                 <Image
-                  src="/fox_token.png"
+                  src="/FOX_token.png"
                   alt="Tap Balance"
                   width={24}
                   height={24}
@@ -52,13 +52,13 @@ const TokensPage = () => {
             <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
               <div className="flex items-center gap-2 mb-2">
                 <Image
-                  src="/fox_token.png"
-                  alt="fox Balance"
+                  src="/FOX_token.png"
+                  alt="FOX Balance"
                   width={24}
                   height={24}
                   className="w-6 h-6"
                 />
-                <p className="text-white/60 text-sm">fox</p>
+                <p className="text-white/60 text-sm">FOX</p>
               </div>
               <p className="text-xl font-bold text-white">250</p>
             </div>
@@ -73,7 +73,7 @@ const TokensPage = () => {
                        relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              <span className="relative">Convert Tap Balance to fox</span>
+              <span className="relative">Convert Tap Balance to FOX</span>
             </button>
           </div>
 
@@ -89,8 +89,8 @@ const TokensPage = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <span className="relative flex items-center justify-center gap-2">
                 <Image
-                  src="/fox_token.png"
-                  alt="fox Token"
+                  src="/FOX_token.png"
+                  alt="FOX Token"
                   width={24}
                   height={24}
                   className="w-6 h-6"
@@ -113,23 +113,23 @@ const TokensPage = () => {
               <div className="flex justify-between items-center">
                 <p className="text-white/60">1000 Tap Balance</p>
                 <p className="text-white">=</p>
-                <p className="text-white">10 fox Tokens</p>
+                <p className="text-white">10 FOX Tokens</p>
               </div>
             </div>
           </div>
 
-          {/* fox Token Balance */}
+          {/* FOX Token Balance */}
           <div className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10">
             <div className="flex items-center justify-center gap-3 mb-4">
               <Image
-                src="/fox_token.png"
-                alt="fox Token"
+                src="/FOX_token.png"
+                alt="FOX Token"
                 width={48}
                 height={48}
                 className="w-12 h-12"
               />
               <div className="text-center">
-                <p className="text-white/60 text-sm">fox Tokens</p>
+                <p className="text-white/60 text-sm">FOX Tokens</p>
                 <h2 className="text-2xl font-bold text-white">250</h2>
               </div>
             </div>

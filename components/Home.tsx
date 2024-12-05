@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
@@ -39,6 +38,11 @@ const Home = () => {
     const minutes = Math.floor((time % 3600) / 60).toString().padStart(2, '0');
     const seconds = (time % 60).toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
+  };
+
+  // Function to remove a particle
+  const removeParticle = (id: number) => {
+    setParticles((prev) => prev.filter((particle) => particle.id !== id));
   };
 
   return (

@@ -6,6 +6,7 @@ const Home = () => {
   const [remainingTime, setRemainingTime] = useState(6 * 60 * 60); // 6 hours in seconds
   const [isClaimed, setIsClaimed] = useState(false);
   const [foxBalance, setFoxBalance] = useState(0);
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; angle: number }[]>([]);
 
   // Countdown timer logic
   useEffect(() => {
@@ -78,6 +79,16 @@ const Home = () => {
         <div className="mt-6 text-white text-lg font-medium">
           Your FOX Balance: {foxBalance} 🦊
         </div>
+
+        {/* Particle Effects (TapFOX component) */}
+        {particles.map((particle) => (
+          <TapFOX
+            key={particle.id}
+            position={{ x: particle.x, y: particle.y }} // Correct position with x and y
+            angle={particle.angle} // The angle for particle movement
+            onComplete={() => removeParticle(particle.id)} // Callback to remove particle when animation completes
+          />
+        ))}
       </div>
     </main>
   );

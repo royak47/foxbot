@@ -4,11 +4,11 @@ import Image from 'next/image';
 
 const InvitePage = () => {
   const handleTelegramJoin = () => {
-    window.open('https://t.me/BABYLIGER_COMMUNITY_PORTAL', '_blank');
+    window.open('https://t.me/FOXOGcommunity', '_blank');
   };
 
   const handleTwitterJoin = () => {
-    window.open('https://x.com/babyliger_blg', '_blank');
+    window.open('https://x.com/FOXOG', '_blank');
   };
 
   return (

@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import Navbar from './Navbar';
-import TapLiger from './TapLiger';
+import TapFOX from './TapFOX';
 
 interface TapParticle {
   id: number;
@@ -188,8 +188,8 @@ const Home = () => {
           >
             <div className="relative w-48 h-48">
               <Image
-                src="/babyliger_token.png"
-                alt="Baby Liger Token"
+                src="/FOX_token.png"
+                alt="FOX Token"
                 fill
                 className={`object-contain transition-transform duration-200 ${
                   isPressed ? 'scale-95' : 'scale-100'

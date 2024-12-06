@@ -177,70 +177,7 @@ const Home = () => {
             </div>
           )}
 
-          {/* Tap Button */}
-          <button
-            ref={buttonRef}
-            onClick={handleTap}
-            disabled={stats.dailyTaps >= DAILY_TAP_LIMIT}
-            className={`relative transform transition-all duration-200 ${
-              isPressed ? 'scale-95' : 'scale-100 hover:scale-105'
-            } ${stats.dailyTaps >= DAILY_TAP_LIMIT ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            <div className="relative w-48 h-48">
-              <Image
-                src="/FOX_token.png"
-                alt="FOX Token"
-                fill
-                className={`object-contain transition-transform duration-200 ${
-                  isPressed ? 'scale-95' : 'scale-100'
-                }`}
-                priority
-              />
-            </div>
-
-            {/* Tap Animation Ring */}
-            <div className={`absolute inset-0 rounded-full transition-opacity duration-200 ${
-              isPressed ? 'animate-ping-once bg-purple-500/20' : 'opacity-0'
-            }`} />
-
-            {/* Reward Animation */}
-            {isPressed && (
-              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-green-400 font-bold text-xl animate-reward-popup">
-                +{TAP_REWARD}
-              </div>
-            )}
-          </button>
-
-          {/* Particle Effects */}
-          {particles.map(particle => (
-            <TapFOX
-              key={particle.id}
-              position={{ x: particle.x, y: particle.y }}
-              angle={particle.angle}
-              onComplete={() => removeParticle(particle.id)}
-            />
-          ))}
-
-          {/* Tap Status */}
-          <p className="text-white/60 text-sm mt-4">
-            {stats.dailyTaps >= DAILY_TAP_LIMIT 
-              ? 'Daily limit reached! Come back tomorrow!'
-              : `Tap to earn ${TAP_REWARD} tokens! (${DAILY_TAP_LIMIT - stats.dailyTaps} taps remaining)`
-            }
-          </p>
-
-          {/* Daily Progress */}
-          <div className="mt-6 w-full max-w-xs">
-            <div className="bg-white/10 rounded-full h-2 overflow-hidden">
-              <div 
-                className="bg-gradient-to-r from-purple-500 to-pink-500 h-full transition-all duration-300"
-                style={{ width: `${(stats.dailyTaps / DAILY_TAP_LIMIT) * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
+          
       {/* Contest Button */}
       <div className="absolute left-4 bottom-20 z-10">
         <button

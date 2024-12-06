@@ -1,25 +1,14 @@
-'use client';
-import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
-// Assuming TapFOX is imported correctly
-import TapFOX from './TapFOX';
 import Navbar from './Navbar';
+
 const Home = () => {
-  const [remainingTime, setRemainingTime] = useState(6 * 60 * 60); // 6 hours in seconds
+  const [remainingTime, setRemainingTime] = useState(6 * 60 * 60);
   const [isClaimed, setIsClaimed] = useState(false);
   const [foxBalance, setFoxBalance] = useState(0);
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; angle: number }[]>([]);
 
-  // Countdown timer logic
   useEffect(() => {
     const timer = setInterval(() => {
-      setRemainingTime((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
+      setRemainingTime((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
 
     return () => clearInterval(timer);
@@ -27,12 +16,12 @@ const Home = () => {
 
   const handleClaim = () => {
     if (remainingTime === 0 && !isClaimed) {
-      setFoxBalance((prev) => prev + 10); // Add 10 FOX to balance
+      setFoxBalance((prev) => prev + 10);
       setIsClaimed(true);
       setTimeout(() => {
-        setRemainingTime(6 * 60 * 60); // Reset the timer for the next claim
+        setRemainingTime(6 * 60 * 60);
         setIsClaimed(false);
-      }, 1000); // Allow reset after claim animation
+      }, 1000);
     }
   };
 
@@ -43,61 +32,46 @@ const Home = () => {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  // Function to remove a particle
   const removeParticle = (id: number) => {
     setParticles((prev) => prev.filter((particle) => particle.id !== id));
   };
 
   return (
-    <main className="flex items-center justify-center w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a]">
-      <div className="text-center">
-        {/* FOX Image */}
-        <div className="relative w-40 h-40 mx-auto mb-4">
-          <Image
-            src="/tapFOX.png"
-            alt="Tap FOX"
-            fill
-            className="object-contain"
-            priority
-          />
+    <>
+      <Navbar />
+      <main className="flex items-center justify-center w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a]">
+        <div className="text-center">
+          <div className="relative w-40 h-40 mx-auto mb-4">
+            <Image src="/tapFOX.png" alt="Tap FOX" fill className="object-contain" priority />
+          </div>
+          <div className="text-white text-2xl font-bold mb-4">
+            {remainingTime > 0 ? `Next Claim In: ${formatTime(remainingTime)}` : 'Claim Now!'}
+          </div>
+          <button
+            onClick={handleClaim}
+            disabled={remainingTime > 0 || isClaimed}
+            className={`px-6 py-3 text-lg font-semibold rounded-lg shadow-md transition-transform transform ${
+              remainingTime === 0 && !isClaimed
+                ? 'bg-green-500 hover:bg-green-600 text-white scale-105'
+                : 'bg-gray-500 text-gray-300 cursor-not-allowed'
+            }`}
+          >
+            {isClaimed ? 'Claimed!' : 'Claim 10 FOX'}
+          </button>
+          <div className="mt-6 text-white text-lg font-medium">
+            Your FOX Balance: {foxBalance} 🦊
+          </div>
+          {particles.map((particle) => (
+            <TapFOX
+              key={particle.id}
+              position={{ x: particle.x, y: particle.y }}
+              angle={particle.angle}
+              onComplete={() => removeParticle(particle.id)}
+            />
+          ))}
         </div>
-
-        {/* Countdown Timer */}
-        <div className="text-white text-2xl font-bold mb-4">
-          {remainingTime > 0
-            ? `Next Claim In: ${formatTime(remainingTime)}`
-            : 'Claim Now!'}
-        </div>
-
-        {/* Claim Button */}
-        <button
-          onClick={handleClaim}
-          disabled={remainingTime > 0 || isClaimed}
-          className={`px-6 py-3 text-lg font-semibold rounded-lg shadow-md transition-transform transform ${
-            remainingTime === 0 && !isClaimed
-              ? 'bg-green-500 hover:bg-green-600 text-white scale-105'
-              : 'bg-gray-500 text-gray-300 cursor-not-allowed'
-          }`}
-        >
-          {isClaimed ? 'Claimed!' : 'Claim 10 FOX'}
-        </button>
-
-        {/* Balance Display */}
-        <div className="mt-6 text-white text-lg font-medium">
-          Your FOX Balance: {foxBalance} 🦊
-        </div>
-
-        {/* Particle Effects (TapFOX component) */}
-        {particles.map((particle) => (
-          <TapFOX
-            key={particle.id}
-            position={{ x: particle.x, y: particle.y }} // Passing position correctly
-            angle={particle.angle} // Passing angle correctly
-            onComplete={() => removeParticle(particle.id)} // Removing particle when animation is complete
-          />
-        ))}
-      </div>
-    </main>
+      </main>
+    </>
   );
 };
 

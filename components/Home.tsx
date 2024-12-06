@@ -164,7 +164,7 @@ const Home = () => {
 
           {/* Title Bar */}
           <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
-            <h1 className="text-2xl font-bold text-white text-center">Baby Liger</h1>
+            <h1 className="text-2xl font-bold text-white text-center">FOX</h1>
           </div>
         </header>
 

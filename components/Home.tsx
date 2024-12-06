@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios'; // For SQL API integration
 import Navbar from './Navbar';
 
 const Home = () => {
@@ -10,11 +11,14 @@ const Home = () => {
   const [miningActive, setMiningActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0); // Time left in seconds
   const [error, setError] = useState('');
+  const [miningProgress, setMiningProgress] = useState(0); // Progress in percentage
+  const [minedTokens, setMinedTokens] = useState(0); // Count mined tokens
   const [username, setUsername] = useState<string>('username');
   const [photoUrl, setPhotoUrl] = useState<string>('/userimage.png');
 
   const MINING_DURATION = 6 * 60 * 60; // 6 hours in seconds
   const REWARD_AMOUNT = 10;
+  const BACKEND_API = '/api/mining'; // Replace with your backend endpoint
 
   // Get user data from localStorage
   useEffect(() => {
@@ -23,20 +27,43 @@ const Home = () => {
 
     if (storedUsername) setUsername(storedUsername);
     if (storedPhotoUrl) setPhotoUrl(storedPhotoUrl);
+
+    // Fetch mining balance from SQL
+    fetchMiningData();
   }, []);
+
+  const fetchMiningData = async () => {
+    try {
+      const response = await axios.get(BACKEND_API, { params: { username } });
+      setStats({ balance: response.data.balance || 0 });
+    } catch (error) {
+      console.error('Error fetching mining data:', error);
+    }
+  };
+
+  const updateMiningData = async (newBalance: number) => {
+    try {
+      await axios.post(BACKEND_API, { username, balance: newBalance });
+    } catch (error) {
+      console.error('Error updating mining data:', error);
+    }
+  };
 
   // Mining timer logic
   useEffect(() => {
     if (miningActive && timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft(prev => prev - 1);
+        setMiningProgress(((MINING_DURATION - timeLeft) / MINING_DURATION) * 100);
       }, 1000);
 
       return () => clearInterval(timer);
     }
 
     if (timeLeft === 0 && miningActive) {
-      setMiningActive(false); // Stop mining automatically when time is up
+      setMiningActive(false);
+      setMiningProgress(100);
+      setMinedTokens(REWARD_AMOUNT);
     }
   }, [miningActive, timeLeft]);
 
@@ -48,6 +75,8 @@ const Home = () => {
 
     setMiningActive(true);
     setTimeLeft(MINING_DURATION);
+    setMiningProgress(0);
+    setMinedTokens(0);
     setError('');
   };
 
@@ -62,9 +91,9 @@ const Home = () => {
       return;
     }
 
-    setStats(prev => ({
-      balance: prev.balance + REWARD_AMOUNT,
-    }));
+    const newBalance = stats.balance + minedTokens;
+    setStats({ balance: newBalance });
+    updateMiningData(newBalance);
     setMiningActive(false);
     setError('');
   };
@@ -95,67 +124,74 @@ const Home = () => {
 
       {/* Content */}
       <div className="relative z-10 min-h-screen pb-20">
-        <header className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-xl rounded-xl px-4 py-2 border border-white/20">
-              <Image
-                src="/tapliger.png"
-                alt="tapliger"
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-              <span className="text-white font-semibold">Tap Coin: {stats.balance}</span>
-            </div>
-
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl rounded-full px-4 py-2 border border-white/20">
-              <span className="text-white font-medium">@{username}</span>
-              <div className="w-8 h-8 rounded-full overflow-hidden">
-                <Image
-                  src={photoUrl}
-                  alt="User Profile"
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
+        <header className="p-4 flex flex-col items-center">
+          <Image
+            src="/FOX.png"
+            alt="FOX Logo"
+            width={128}
+            height={128}
+            className="mb-4"
+          />
+          <h1 className="text-4xl font-bold text-white">Start Mining FOX</h1>
         </header>
 
-        <div className="flex flex-col items-center justify-center flex-1 p-8 min-h-[60vh]">
+        <div className="flex flex-col items-center justify-center flex-1 p-8 min-h-[60vh] space-y-6">
           {error && (
             <div className="mb-4 p-3 bg-red-500/20 text-red-200 rounded-lg text-center">
               {error}
             </div>
           )}
 
-          <div className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10 text-center space-y-4">
-            <h1 className="text-2xl font-bold text-white">Start Mining FOX</h1>
-            <p className="text-lg text-gray-300">
-              {miningActive
-                ? `Time Left: ${formatTime(timeLeft)}`
-                : 'Click "Start Mining" to begin earning tokens!'}
-            </p>
-            <div className="space-x-4">
-              <button
-                onClick={startMining}
-                className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors duration-200"
-                disabled={miningActive}
-              >
-                Start Mining
-              </button>
-              <button
-                onClick={claimReward}
-                className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
-                disabled={timeLeft > 0}
-              >
-                Claim Reward
-              </button>
+          {/* Mining Section */}
+          <div className="relative w-72 h-72 rounded-full border-4 border-[#2081e2] flex items-center justify-center">
+            <div
+              className="absolute top-0 left-0 w-full h-full rounded-full animate-spin-slow"
+              style={{
+                background: `conic-gradient(#2081e2 ${miningProgress}%, #1a1a1a ${miningProgress}%)`,
+              }}
+            ></div>
+            <div className="absolute w-64 h-64 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white">
+              {miningActive ? (
+                <>
+                  <p className="text-2xl font-semibold">Time Left:</p>
+                  <p className="text-xl font-bold">{formatTime(timeLeft)}</p>
+                </>
+              ) : (
+                <p className="text-xl font-bold">Ready to Mine!</p>
+              )}
+              <p className="text-lg mt-2">Mined Tokens: {minedTokens}</p>
             </div>
+          </div>
+
+          <div className="space-x-4">
+            <button
+              onClick={startMining}
+              className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors duration-200"
+              disabled={miningActive}
+            >
+              Start Mining
+            </button>
+            <button
+              onClick={claimReward}
+              className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
+              disabled={timeLeft > 0 || minedTokens === 0}
+            >
+              Claim Reward
+            </button>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes spin-slow {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </main>
   );
 };

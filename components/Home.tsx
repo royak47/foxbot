@@ -1,10 +1,9 @@
 'use client';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
-import Navbar from './Navbar';
 // Assuming TapFOX is imported correctly
 import TapFOX from './TapFOX';
-
+import Navbar from './Navbar';
 const Home = () => {
   const [remainingTime, setRemainingTime] = useState(6 * 60 * 60); // 6 hours in seconds
   const [isClaimed, setIsClaimed] = useState(false);

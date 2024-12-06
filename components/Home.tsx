@@ -213,7 +213,7 @@ const Home = () => {
 
           {/* Particle Effects */}
           {particles.map(particle => (
-            <TapLiger
+            <TapFOX
               key={particle.id}
               position={{ x: particle.x, y: particle.y }}
               angle={particle.angle}

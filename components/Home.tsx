@@ -19,14 +19,18 @@ const Home = () => {
   const REWARD_AMOUNT = 10;
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    const storedPhotoUrl = localStorage.getItem('photoUrl');
+    try {
+      const storedUsername = localStorage.getItem('username');
+      const storedPhotoUrl = localStorage.getItem('photoUrl');
 
-    if (storedUsername) setUsername(storedUsername);
-    if (storedPhotoUrl) setPhotoUrl(storedPhotoUrl);
+      if (storedUsername) setUsername(storedUsername);
+      if (storedPhotoUrl) setPhotoUrl(storedPhotoUrl);
 
-    fetchMiningData();
-    restoreMiningState();
+      fetchMiningData();
+      restoreMiningState();
+    } catch (err) {
+      console.error('Error accessing localStorage:', err);
+    }
   }, []);
 
   const fetchMiningData = async () => {
@@ -35,14 +39,6 @@ const Home = () => {
       setStats({ balance: response.data.balance || 0 });
     } catch (error) {
       console.error('Error fetching mining data:', error);
-    }
-  };
-
-  const updateMiningData = async (newBalance: number) => {
-    try {
-      await axios.post('/api/mining', { username, balance: newBalance });
-    } catch (error) {
-      console.error('Error updating mining data:', error);
     }
   };
 
@@ -59,23 +55,6 @@ const Home = () => {
       }
     }
   };
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (miningActive && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-        setMiningProgress(((MINING_DURATION - (timeLeft - 1)) / MINING_DURATION) * 100);
-      }, 1000);
-    } else if (timeLeft === 0 && miningActive) {
-      setMiningActive(false);
-      setMiningProgress(100);
-      setMinedTokens(REWARD_AMOUNT);
-    }
-
-    return () => clearInterval(timer);
-  }, [miningActive, timeLeft]);
 
   const startMining = () => {
     if (miningActive) {
@@ -197,7 +176,7 @@ const Home = () => {
             <button
               onClick={claimReward}
               className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
-              disabled={Time Left > 0 || Mined Tokens === 0 || miningActive}
+              disabled={timeLeft > 0 || minedTokens === 0 || miningActive}
             >
               Claim Reward
             </button>

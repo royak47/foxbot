@@ -1,9 +1,12 @@
+// components/Home.tsx
+'use client';
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import Navbar from './Navbar';
 
+// Your component code...
 const Home = () => {
   const [stats, setStats] = useState({ balance: 0 });
   const [miningActive, setMiningActive] = useState(false);

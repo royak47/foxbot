@@ -17,6 +17,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        "dot-matrix": ["'Dot Gothic 16'", "monospace"], // Add LED dot matrix font
+      },
     },
   },
   plugins: [],

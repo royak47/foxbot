@@ -1,8 +1,46 @@
 'use client';
 import Navbar from '@/components/Navbar';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 const InvitePage = () => {
+  const [referralLink, setReferralLink] = useState('');
+  const [referralCount, setReferralCount] = useState(0);
+
+  useEffect(() => {
+    // Generate the unique referral link for the user
+    const userId = 'unique_user_id'; // Replace with dynamic user ID or username logic
+    const link = `${window.location.origin}/invite?ref=${userId}`;
+    setReferralLink(link);
+
+    // Fetch referral count from the backend
+    fetchReferralCount(userId);
+  }, []);
+
+  const fetchReferralCount = async (userId: string) => {
+    try {
+      // Simulate an API call to get referral count
+      const response = await fetch(`/api/referrals?userId=${userId}`);
+      const data = await response.json();
+      setReferralCount(data.count || 0);
+    } catch (error) {
+      console.error('Error fetching referral count:', error);
+    }
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(referralLink);
+    alert('Referral link copied to clipboard!');
+  };
+
+  const handleShareOnTelegram = () => {
+    const message = `Join FOXOG and earn rewards! Use my referral link: ${referralLink}`;
+    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(telegramUrl, '_blank');
+  };
+
   const handleTelegramJoin = () => {
     window.open('https://t.me/FOXOGcommunity', '_blank');
   };
@@ -24,7 +62,7 @@ const InvitePage = () => {
           quality={100}
         />
       </div>
-      
+
       {/* Content */}
       <div className="relative z-10 min-h-screen pb-20">
         <header className="p-4">
@@ -38,7 +76,7 @@ const InvitePage = () => {
           <div className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10">
             <h2 className="text-xl font-bold text-white text-center mb-2">Earn Tokens</h2>
             <p className="text-white/60 text-center text-sm mb-4">
-              Join our communities and earn tokens as rewards!
+              Join our communities and invite friends to earn tokens!
             </p>
             <div className="flex justify-center items-center gap-2 bg-[#FFD700]/20 rounded-lg p-3">
               <Image
@@ -49,7 +87,7 @@ const InvitePage = () => {
                 className="w-6 h-6"
               />
               <span className="text-[#FFD700] font-semibold">
-                500 tokens per community join
+                500 tokens per community join, 1000 tokens per referral
               </span>
             </div>
           </div>
@@ -93,24 +131,26 @@ const InvitePage = () => {
             </button>
           </div>
 
-          {/* Additional Info */}
-          <div className="mt-6 bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-white font-medium mb-1">How it works</h3>
-                <p className="text-white/60 text-sm">
-                  1. Click on the community you want to join<br />
-                  2. Follow/Join the community<br />
-                  3. Return to the app<br />
-                  4. Tokens will be credited within 24 hours
-                </p>
-              </div>
+          {/* Invite Friends */}
+          <div className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10">
+            <h2 className="text-xl font-bold text-white text-center mb-4">Invite Friends</h2>
+            <div className="flex gap-4">
+              <button
+                onClick={handleCopyLink}
+                className="flex-1 bg-[#FFD700] text-black font-semibold rounded-lg py-2 px-4 text-center"
+              >
+                Copy Link
+              </button>
+              <button
+                onClick={handleShareOnTelegram}
+                className="flex-1 bg-[#0088CC] text-white font-semibold rounded-lg py-2 px-4 text-center"
+              >
+                Share on Telegram
+              </button>
             </div>
+            <p className="text-white/80 text-center mt-4">
+              Total Referrals: <span className="text-white font-bold">{referralCount}</span>
+            </p>
           </div>
         </div>
       </div>

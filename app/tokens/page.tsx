@@ -89,7 +89,7 @@ const TokensPage = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <span className="relative flex items-center justify-center gap-2">
                 <Image
-                  src="/FOX_token.png"
+                  src="/tapFOX.png"
                   alt="FOX Token"
                   width={24}
                   height={24}

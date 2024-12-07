@@ -9,8 +9,8 @@ const InvitePage = () => {
 
   useEffect(() => {
     // Generate the unique referral link for the user
-    const userId = 'unique_user_id'; // Replace with dynamic user ID or username logic
-    const link = `${window.location.origin}/invite?ref=${userId}`;
+    const userId = 'unique_user_id'; // Replace with dynamic user ID logic
+    const link = `https://t.me/FOXOG_BOT/FOX?start=${userId}`;
     setReferralLink(link);
 
     // Fetch referral count from the backend

@@ -182,6 +182,23 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Dot+Gothic+16&display=swap');
+
+        .font-dot-matrix {
+          font-family: 'Dot Gothic 16', sans-serif;
+        }
+
+        @keyframes spin-slow {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </main>
   );
 };

@@ -1,7 +1,7 @@
-'use client';
-import Image from 'next/image';
+// pages/index.tsx (or pages/index.js)
 import { useState, useEffect } from 'react';
-import axios from 'axios'; // For SQL API integration
+import axios from 'axios';
+import Image from 'next/image';
 import Navbar from './Navbar';
 
 const Home = () => {
@@ -18,9 +18,8 @@ const Home = () => {
 
   const MINING_DURATION = 6 * 60 * 60; // 6 hours in seconds
   const REWARD_AMOUNT = 10;
-  const BACKEND_API = '/api/mining'; // Replace with your backend endpoint
 
-  // Get user data from localStorage
+  // Fetch user data from localStorage
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     const storedPhotoUrl = localStorage.getItem('photoUrl');
@@ -28,22 +27,24 @@ const Home = () => {
     if (storedUsername) setUsername(storedUsername);
     if (storedPhotoUrl) setPhotoUrl(storedPhotoUrl);
 
-    // Fetch mining balance from SQL
+    // Fetch mining balance from MongoDB
     fetchMiningData();
   }, []);
 
+  // Fetch mining data from the database
   const fetchMiningData = async () => {
     try {
-      const response = await axios.get(BACKEND_API, { params: { username } });
+      const response = await axios.get(`/api/mining?username=${username}`);
       setStats({ balance: response.data.balance || 0 });
     } catch (error) {
       console.error('Error fetching mining data:', error);
     }
   };
 
+  // Update mining data in the database
   const updateMiningData = async (newBalance: number) => {
     try {
-      await axios.post(BACKEND_API, { username, balance: newBalance });
+      await axios.post('/api/mining', { username, balance: newBalance });
     } catch (error) {
       console.error('Error updating mining data:', error);
     }
@@ -53,7 +54,7 @@ const Home = () => {
   useEffect(() => {
     if (miningActive && timeLeft > 0) {
       const timer = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
+        setTimeLeft((prev) => prev - 1);
         setMiningProgress(((MINING_DURATION - timeLeft) / MINING_DURATION) * 100);
       }, 1000);
 
@@ -93,7 +94,7 @@ const Home = () => {
 
     const newBalance = stats.balance + minedTokens;
     setStats({ balance: newBalance });
-    updateMiningData(newBalance);
+    updateMiningData(newBalance); // Update the mining data in the backend (MongoDB)
     setMiningActive(false);
     setError('');
   };
@@ -143,14 +144,14 @@ const Home = () => {
           )}
 
           {/* Mining Section */}
-          <div className="relative w-72 h-72 rounded-full border-4 border-[#2081e2] flex items-center justify-center shadow-2xl hover:shadow-blue-500/50">
+          <div className="relative w-72 h-72 rounded-full border-4 border-[#2081e2] flex items-center justify-center">
             <div
               className="absolute top-0 left-0 w-full h-full rounded-full animate-spin-slow"
               style={{
                 background: `conic-gradient(#2081e2 ${miningProgress}%, #1a1a1a ${miningProgress}%)`,
               }}
             ></div>
-            <div className="absolute w-64 h-64 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white shadow-md hover:shadow-lg">
+            <div className="absolute w-64 h-64 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white">
               {miningActive ? (
                 <>
                   <p className="text-2xl font-semibold">Time Left:</p>
@@ -166,14 +167,14 @@ const Home = () => {
           <div className="space-x-4">
             <button
               onClick={startMining}
-              className="px-6 py-2.5 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
+              className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors duration-200"
               disabled={miningActive}
             >
               Start Mining
             </button>
             <button
               onClick={claimReward}
-              className="px-6 py-2.5 bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
+              className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
               disabled={timeLeft > 0 || minedTokens === 0}
             >
               Claim Reward

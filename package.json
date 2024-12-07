@@ -13,7 +13,8 @@
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-telegram-login": "^1.1.2",
-    "axios": "^1.4.0"
+    "axios": "^1.4.0",
+    "mongoose": "^7.0.3"  // <-- Added mongoose
   },
   "devDependencies": {
     "@types/node": "^20",

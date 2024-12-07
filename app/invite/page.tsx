@@ -42,7 +42,7 @@ const InvitePage = () => {
             </p>
             <div className="flex justify-center items-center gap-2 bg-[#FFD700]/20 rounded-lg p-3">
               <Image
-                src="/FOX_token.png"
+                src="/tapFOX.png"
                 alt="Token"
                 width={24}
                 height={24}

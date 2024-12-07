@@ -124,7 +124,7 @@ const Home = () => {
       <div className="relative z-10 min-h-screen pb-20">
         <header className="p-4 flex flex-col items-center">
           <Image
-            src="/FOX.png"
+            src="/tapFOX.png"
             alt="FOX Logo"
             width={128}
             height={128}

@@ -52,7 +52,7 @@ const Home = () => {
     if (miningActive && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
-        setMiningProgress(((MINING_DURATION - timeLeft) / MINING_DURATION) * 100);
+        setMiningProgress(((MINING_DURATION - (timeLeft - 1)) / MINING_DURATION) * 100);
       }, 1000);
     } else if (timeLeft === 0 && miningActive) {
       setMiningActive(false);
@@ -78,7 +78,7 @@ const Home = () => {
   };
 
   const claimReward = () => {
-    if (timeLeft > 0) {
+    if (timeLeft > 0 || minedTokens === 0) {
       setError('Mining is still in progress. Wait for it to complete!');
       return;
     }
@@ -98,6 +98,13 @@ const Home = () => {
 
     return `${hours}h ${minutes}m ${secs}s`;
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
 
   return (
     <main className="relative w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] overflow-hidden">
@@ -158,7 +165,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="flex justify-between w-72">
+          <div className="flex justify-around w-full max-w-md space-x-4">
             <button
               onClick={startMining}
               className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors duration-200"
@@ -169,7 +176,7 @@ const Home = () => {
             <button
               onClick={claimReward}
               className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
-              disabled={timeLeft > 0 || minedTokens === 0}
+              disabled={timeLeft > 0 || minedTokens === 0 || miningActive}
             >
               Claim Reward
             </button>

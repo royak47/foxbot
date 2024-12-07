@@ -1,4 +1,3 @@
-// components/Home.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,22 +5,20 @@ import axios from 'axios';
 import Image from 'next/image';
 import Navbar from './Navbar';
 
-// Your component code...
 const Home = () => {
   const [stats, setStats] = useState({ balance: 0 });
   const [miningActive, setMiningActive] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0); // Time left in seconds
+  const [timeLeft, setTimeLeft] = useState(0);
   const [error, setError] = useState('');
-  const [miningProgress, setMiningProgress] = useState(0); // Progress in percentage
-  const [minedTokens, setMinedTokens] = useState(0); // Count mined tokens
+  const [miningProgress, setMiningProgress] = useState(0);
+  const [minedTokens, setMinedTokens] = useState(0);
+  const [successMessage, setSuccessMessage] = useState('');
   const [username, setUsername] = useState<string>('username');
   const [photoUrl, setPhotoUrl] = useState<string>('/userimage.png');
 
   const MINING_DURATION = 6 * 60 * 60; // 6 hours in seconds
   const REWARD_AMOUNT = 10;
-  const [initialTimeLeft, setInitialTimeLeft] = useState(MINING_DURATION); // Initial time for progress calculation
 
-  // Fetch user data from localStorage
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     const storedPhotoUrl = localStorage.getItem('photoUrl');
@@ -29,11 +26,9 @@ const Home = () => {
     if (storedUsername) setUsername(storedUsername);
     if (storedPhotoUrl) setPhotoUrl(storedPhotoUrl);
 
-    // Fetch mining balance from MongoDB
     fetchMiningData();
   }, []);
 
-  // Fetch mining data from the database
   const fetchMiningData = async () => {
     try {
       const response = await axios.get(`/api/mining?username=${username}`);
@@ -43,7 +38,6 @@ const Home = () => {
     }
   };
 
-  // Update mining data in the database
   const updateMiningData = async (newBalance: number) => {
     try {
       await axios.post('/api/mining', { username, balance: newBalance });
@@ -52,14 +46,13 @@ const Home = () => {
     }
   };
 
-  // Mining timer logic
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (miningActive && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
-        setMiningProgress(((initialTimeLeft - timeLeft) / initialTimeLeft) * 100);
+        setMiningProgress(((MINING_DURATION - timeLeft) / MINING_DURATION) * 100);
       }, 1000);
     } else if (timeLeft === 0 && miningActive) {
       setMiningActive(false);
@@ -68,7 +61,7 @@ const Home = () => {
     }
 
     return () => clearInterval(timer);
-  }, [miningActive, timeLeft, initialTimeLeft]);
+  }, [miningActive, timeLeft]);
 
   const startMining = () => {
     if (miningActive) {
@@ -78,10 +71,10 @@ const Home = () => {
 
     setMiningActive(true);
     setTimeLeft(MINING_DURATION);
-    setInitialTimeLeft(MINING_DURATION); // Reset the initial time for progress calculation
     setMiningProgress(0);
     setMinedTokens(0);
     setError('');
+    setSuccessMessage('');
   };
 
   const claimReward = () => {
@@ -90,16 +83,12 @@ const Home = () => {
       return;
     }
 
-    if (!miningActive) {
-      setError('You need to start mining first!');
-      return;
-    }
-
     const newBalance = stats.balance + minedTokens;
     setStats({ balance: newBalance });
-    updateMiningData(newBalance); // Update the mining data in the backend (MongoDB)
-    setMiningActive(false);
+    updateMiningData(newBalance);
+    setMinedTokens(0);
     setError('');
+    setSuccessMessage('10 FOX tokens claimed and added to your balance!');
   };
 
   const formatTime = (seconds: number) => {
@@ -114,7 +103,6 @@ const Home = () => {
     <main className="relative w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] overflow-hidden">
       <Navbar />
 
-      {/* Background Image */}
       <div className="absolute inset-0">
         <Image
           src="/space.png"
@@ -126,7 +114,6 @@ const Home = () => {
         />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 min-h-screen pb-20">
         <header className="p-4 flex flex-col items-center">
           <Image
@@ -145,16 +132,20 @@ const Home = () => {
               {error}
             </div>
           )}
+          {successMessage && (
+            <div className="mb-4 p-3 bg-green-500/20 text-green-200 rounded-lg text-center">
+              {successMessage}
+            </div>
+          )}
 
-          {/* Mining Section */}
-          <div className="relative w-72 h-72 rounded-full border-4 border-[#2081e2] flex items-center justify-center">
+          <div className="relative w-64 h-64 rounded-full border-4 border-[#2081e2] flex items-center justify-center">
             <div
               className="absolute top-0 left-0 w-full h-full rounded-full animate-spin-slow"
               style={{
                 background: `conic-gradient(#2081e2 ${miningProgress}%, #1a1a1a ${miningProgress}%)`,
               }}
             ></div>
-            <div className="absolute w-64 h-64 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white">
+            <div className="absolute w-56 h-56 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white">
               {miningActive ? (
                 <>
                   <p className="text-2xl font-semibold">Time Left:</p>
@@ -167,7 +158,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="space-x-4">
+          <div className="flex justify-between w-72">
             <button
               onClick={startMining}
               className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors duration-200"

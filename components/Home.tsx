@@ -147,7 +147,7 @@ const Home = () => {
             height={128}
             className="mb-4"
           />
-          <h1 className="text-4xl font-bold text-white">Start Mining FOX</h1>
+          <h1 className="text-4xl font-bold text-white">𝗦𝗧𝗔𝗥𝗧 𝗠𝗜𝗡𝗜𝗡𝗚 𝗙𝗢𝗫</h1>
         </header>
 
         <div className="flex flex-col items-center justify-center flex-1 p-8 min-h-[60vh] space-y-6">
@@ -197,7 +197,7 @@ const Home = () => {
             <button
               onClick={claimReward}
               className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
-              disabled={timeLeft > 0 || minedTokens === 0 || miningActive}
+              disabled={𝐓𝐢𝐦𝐞 𝐋𝐞𝐟𝐭 > 0 || ᴍɪɴᴇᴅ ᴛᴏᴋᴇɴ === 0 || miningActive}
             >
               Claim Reward
             </button>

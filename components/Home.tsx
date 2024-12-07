@@ -91,7 +91,6 @@ const Home = () => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-
     return `${hours}h ${minutes}m ${secs}s`;
   };
 
@@ -126,17 +125,17 @@ const Home = () => {
             height={128}
             className="mb-4"
           />
-          <h1 className="text-4xl font-bold text-white">Start Mining Fox</h1>
+          <h1 className="text-4xl font-dot-matrix text-white">Start Mining Fox</h1>
         </header>
 
         <div className="flex flex-col items-center justify-center flex-1 p-8 min-h-[60vh] space-y-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-500/20 text-red-200 rounded-lg text-center">
+            <div className="mb-4 p-3 bg-red-500/20 text-red-200 rounded-lg text-center font-dot-matrix">
               {error}
             </div>
           )}
           {successMessage && (
-            <div className="mb-4 p-3 bg-green-500/20 text-green-200 rounded-lg text-center">
+            <div className="mb-4 p-3 bg-green-500/20 text-green-200 rounded-lg text-center font-dot-matrix">
               {successMessage}
             </div>
           )}
@@ -151,13 +150,13 @@ const Home = () => {
             <div className="absolute w-56 h-56 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white">
               {miningActive ? (
                 <>
-                  <p className="text-2xl font-semibold">Time Left:</p>
-                  <p className="text-xl font-bold">{formatTime(timeLeft)}</p>
+                  <p className="text-2xl font-semibold font-dot-matrix">Time Left:</p>
+                  <p className="text-xl font-bold font-dot-matrix">{formatTime(timeLeft)}</p>
                 </>
               ) : (
-                <p className="text-xl font-bold">Ready to Mine!</p>
+                <p className="text-xl font-bold font-dot-matrix">Ready to Mine!</p>
               )}
-              <p className="text-lg mt-2">Mined Tokens: {minedTokens}</p>
+              <p className="text-lg mt-2 font-dot-matrix">Mined Tokens: {minedTokens}</p>
             </div>
           </div>
 

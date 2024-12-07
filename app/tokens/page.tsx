@@ -40,7 +40,7 @@ const TokensPage = () => {
               <div className="flex items-center gap-2 mb-2">
                 <Image
                   src="/tapFOX.png"
-                  alt="Tap Balance"
+                  alt="MINING Balance"
                   width={24}
                   height={24}
                   className="w-6 h-6"

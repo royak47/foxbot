@@ -1,13 +1,11 @@
-// pages/index.tsx (or pages/index.js)
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import Navbar from './Navbar';
 
 const Home = () => {
-  const [stats, setStats] = useState({
-    balance: 0,
-  });
+  const [stats, setStats] = useState({ balance: 0 });
   const [miningActive, setMiningActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0); // Time left in seconds
   const [error, setError] = useState('');
@@ -18,6 +16,7 @@ const Home = () => {
 
   const MINING_DURATION = 6 * 60 * 60; // 6 hours in seconds
   const REWARD_AMOUNT = 10;
+  const [initialTimeLeft, setInitialTimeLeft] = useState(MINING_DURATION); // Initial time for progress calculation
 
   // Fetch user data from localStorage
   useEffect(() => {
@@ -52,21 +51,21 @@ const Home = () => {
 
   // Mining timer logic
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+
     if (miningActive && timeLeft > 0) {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
-        setMiningProgress(((MINING_DURATION - timeLeft) / MINING_DURATION) * 100);
+        setMiningProgress(((initialTimeLeft - timeLeft) / initialTimeLeft) * 100);
       }, 1000);
-
-      return () => clearInterval(timer);
-    }
-
-    if (timeLeft === 0 && miningActive) {
+    } else if (timeLeft === 0 && miningActive) {
       setMiningActive(false);
       setMiningProgress(100);
       setMinedTokens(REWARD_AMOUNT);
     }
-  }, [miningActive, timeLeft]);
+
+    return () => clearInterval(timer);
+  }, [miningActive, timeLeft, initialTimeLeft]);
 
   const startMining = () => {
     if (miningActive) {
@@ -76,6 +75,7 @@ const Home = () => {
 
     setMiningActive(true);
     setTimeLeft(MINING_DURATION);
+    setInitialTimeLeft(MINING_DURATION); // Reset the initial time for progress calculation
     setMiningProgress(0);
     setMinedTokens(0);
     setError('');

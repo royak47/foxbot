@@ -185,7 +185,11 @@ const Home = () => {
           <div className="flex justify-around w-full max-w-md space-x-4">
             <button
               onClick={startMining}
-              className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors duration-200"
+              className={`px-6 py-2.5 rounded-lg font-semibold transition-colors duration-200 ${
+                miningActive
+                  ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
+                  : 'bg-green-500 hover:bg-green-600 text-white'
+              }`}
               disabled={miningActive}
             >
               Start Mining

@@ -102,7 +102,7 @@ const Home = () => {
   }, [successMessage]);
 
   return (
-    <main className="relative w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] overflow-hidden">
+    <main className="relative w-full h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] overflow-hidden font-dot-matrix">
       <Navbar />
 
       <div className="absolute inset-0">
@@ -125,17 +125,17 @@ const Home = () => {
             height={128}
             className="mb-4"
           />
-          <h1 className="text-4xl font-dot-matrix text-white">Start Mining Fox</h1>
+          <h1 className="text-4xl font-bold text-white">Start Mining Fox</h1>
         </header>
 
         <div className="flex flex-col items-center justify-center flex-1 p-8 min-h-[60vh] space-y-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-500/20 text-red-200 rounded-lg text-center font-dot-matrix">
+            <div className="mb-4 p-3 bg-red-500/20 text-red-200 rounded-lg text-center">
               {error}
             </div>
           )}
           {successMessage && (
-            <div className="mb-4 p-3 bg-green-500/20 text-green-200 rounded-lg text-center font-dot-matrix">
+            <div className="mb-4 p-3 bg-green-500/20 text-green-200 rounded-lg text-center">
               {successMessage}
             </div>
           )}
@@ -150,13 +150,13 @@ const Home = () => {
             <div className="absolute w-56 h-56 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white">
               {miningActive ? (
                 <>
-                  <p className="text-2xl font-semibold font-dot-matrix">Time Left:</p>
-                  <p className="text-xl font-bold font-dot-matrix">{formatTime(timeLeft)}</p>
+                  <p className="text-2xl font-semibold">Time Left:</p>
+                  <p className="text-xl font-bold">{formatTime(timeLeft)}</p>
                 </>
               ) : (
-                <p className="text-xl font-bold font-dot-matrix">Ready to Mine!</p>
+                <p className="text-xl font-bold">Ready to Mine!</p>
               )}
-              <p className="text-lg mt-2 font-dot-matrix">Mined Tokens: {minedTokens}</p>
+              <p className="text-lg mt-2">Mined Tokens: {minedTokens}</p>
             </div>
           </div>
 
@@ -183,7 +183,13 @@ const Home = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Dot+Gothic+16&display=swap');
+
+        .font-dot-matrix {
+          font-family: 'Dot Gothic 16', sans-serif;
+        }
+
         @keyframes spin-slow {
           0% {
             transform: rotate(0deg);

@@ -197,7 +197,7 @@ const Home = () => {
             <button
               onClick={claimReward}
               className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
-              disabled={TIME LEFT > 0 || MINED TOKEN === 0 || miningActive}
+              disabled={Time Left > 0 || Mined Tokens === 0 || miningActive}
             >
               Claim Reward
             </button>

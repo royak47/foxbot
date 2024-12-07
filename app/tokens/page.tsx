@@ -39,7 +39,7 @@ const TokensPage = () => {
             <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
               <div className="flex items-center gap-2 mb-2">
                 <Image
-                  src="/FOX_token.png"
+                  src="/tapFOX.png"
                   alt="Tap Balance"
                   width={24}
                   height={24}
@@ -52,7 +52,7 @@ const TokensPage = () => {
             <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 border border-white/10">
               <div className="flex items-center gap-2 mb-2">
                 <Image
-                  src="/FOX_token.png"
+                  src="/tapFOX.png"
                   alt="FOX Balance"
                   width={24}
                   height={24}
@@ -122,7 +122,7 @@ const TokensPage = () => {
           <div className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10">
             <div className="flex items-center justify-center gap-3 mb-4">
               <Image
-                src="/FOX_token.png"
+                src="/tapFOX.png"
                 alt="FOX Token"
                 width={48}
                 height={48}

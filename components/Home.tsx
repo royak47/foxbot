@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
@@ -27,6 +26,7 @@ const Home = () => {
     if (storedPhotoUrl) setPhotoUrl(storedPhotoUrl);
 
     fetchMiningData();
+    restoreMiningState();
   }, []);
 
   const fetchMiningData = async () => {
@@ -43,6 +43,20 @@ const Home = () => {
       await axios.post('/api/mining', { username, balance: newBalance });
     } catch (error) {
       console.error('Error updating mining data:', error);
+    }
+  };
+
+  const restoreMiningState = () => {
+    const miningStartTime = localStorage.getItem('miningStartTime');
+    if (miningStartTime) {
+      const elapsed = Math.floor(Date.now() / 1000) - parseInt(miningStartTime, 10);
+      if (elapsed < MINING_DURATION) {
+        setMiningActive(true);
+        setTimeLeft(MINING_DURATION - elapsed);
+        setMiningProgress((elapsed / MINING_DURATION) * 100);
+      } else {
+        localStorage.removeItem('miningStartTime');
+      }
     }
   };
 
@@ -69,6 +83,9 @@ const Home = () => {
       return;
     }
 
+    const currentTime = Math.floor(Date.now() / 1000);
+    localStorage.setItem('miningStartTime', currentTime.toString());
+
     setMiningActive(true);
     setTimeLeft(MINING_DURATION);
     setMiningProgress(0);
@@ -88,7 +105,7 @@ const Home = () => {
     updateMiningData(newBalance);
     setMinedTokens(0);
     setError('');
-    setSuccessMessage('10 FOX tokens claimed and added to your balance!');
+    setSuccessMessage(`${REWARD_AMOUNT} FOX tokens claimed and added to your balance!`);
   };
 
   const formatTime = (seconds: number) => {

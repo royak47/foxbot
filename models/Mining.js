@@ -1,10 +1,9 @@
+import mongoose from 'mongoose';
 
-const mongoose = require('mongoose');
-
-const miningSchema = mongoose.Schema({
+const miningSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   minedPoints: { type: Number, required: true },
-  date: { type: Date, required: true, default: Date.now },
+  date: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Mining', miningSchema);
+export default mongoose.models.Mining || mongoose.model('Mining', miningSchema);

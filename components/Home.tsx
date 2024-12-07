@@ -143,14 +143,14 @@ const Home = () => {
           )}
 
           {/* Mining Section */}
-          <div className="relative w-72 h-72 rounded-full border-4 border-[#2081e2] flex items-center justify-center">
+          <div className="relative w-72 h-72 rounded-full border-4 border-[#2081e2] flex items-center justify-center shadow-2xl hover:shadow-blue-500/50">
             <div
               className="absolute top-0 left-0 w-full h-full rounded-full animate-spin-slow"
               style={{
                 background: `conic-gradient(#2081e2 ${miningProgress}%, #1a1a1a ${miningProgress}%)`,
               }}
             ></div>
-            <div className="absolute w-64 h-64 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white">
+            <div className="absolute w-64 h-64 bg-[#0a0a0a] rounded-full flex flex-col items-center justify-center text-white shadow-md hover:shadow-lg">
               {miningActive ? (
                 <>
                   <p className="text-2xl font-semibold">Time Left:</p>
@@ -166,14 +166,14 @@ const Home = () => {
           <div className="space-x-4">
             <button
               onClick={startMining}
-              className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors duration-200"
+              className="px-6 py-2.5 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
               disabled={miningActive}
             >
               Start Mining
             </button>
             <button
               onClick={claimReward}
-              className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors duration-200"
+              className="px-6 py-2.5 bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
               disabled={timeLeft > 0 || minedTokens === 0}
             >
               Claim Reward

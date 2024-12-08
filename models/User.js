@@ -1,10 +1,13 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  totalPoints: { type: Number, default: 0 },
-});
+  username: { type: String, required: true, unique: true },
+  photoUrl: { type: String, default: '/userimage.png' },
+  balance: { type: Number, default: 0 },
+  minedTokens: { type: Number, default: 0 },
+  referrals: { type: Number, default: 0 },
+  referralCode: { type: String, unique: true },
+  referredBy: { type: String, default: null }, // Referral code of the user who referred this one
+}, { timestamps: true });
 
-export default mongoose.models.User || mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

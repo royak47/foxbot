@@ -1,0 +1,2 @@
+# Ignore .env.local file to keep sensitive data safe
+.env.local

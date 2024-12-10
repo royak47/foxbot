@@ -1,4 +1,5 @@
 'use client';
+import { saveMiningData } from "../firebase/firestore";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';

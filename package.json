@@ -14,7 +14,8 @@
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-telegram-login": "^1.1.2",
     "axios": "^1.4.0",
-    "mongoose": "^7.0.3"
+    "mongoose": "^7.0.3",
+    "firebase": "^9.0.0"  // Add this line
   },
   "devDependencies": {
     "@types/node": "^20",

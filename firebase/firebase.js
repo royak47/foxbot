@@ -1,14 +1,20 @@
+// firebase.js or firebaseConfig.js
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCSF6RBui41qLddbree0O-SGwocmK84RSE",
+  authDomain: "foxbot-2d06a.firebaseapp.com",
+  projectId: "foxbot-2d06a",
+  storageBucket: "foxbot-2d06a.firebasestorage.app",
+  messagingSenderId: "331051920185",
+  appId: "1:331051920185:web:53cad4438439ca9555d6e8",
+  measurementId: "G-04G7PGZJK1"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const analytics = getAnalytics(app);
+
+export { app, analytics };

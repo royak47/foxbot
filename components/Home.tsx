@@ -74,7 +74,7 @@ const Home = () => {
     setSuccessMessage('');
   };
 
-  const claimReward = () => {
+  const claimReward = async () => {
     if (timeLeft > 0 || minedTokens === 0) {
       setError('Mining is still in progress. Wait for it to complete!');
       return;
@@ -82,10 +82,12 @@ const Home = () => {
 
     const newBalance = stats.balance + minedTokens;
     setStats({ balance: newBalance });
-    updateMiningData(newBalance);
     setMinedTokens(0);
     setError('');
     setSuccessMessage(`${REWARD_AMOUNT} FOX tokens claimed and added to your balance!`);
+
+    // Save the updated mining data to Firebase
+    await saveMiningData(username, { balance: newBalance, minedTokens: minedTokens });
   };
 
   const formatTime = (seconds: number) => {
